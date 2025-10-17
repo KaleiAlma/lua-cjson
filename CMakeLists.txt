@@ -15,8 +15,8 @@ if(NOT CMAKE_BUILD_TYPE)
         FORCE)
 endif()
 
-find_package(Lua REQUIRED)
-include_directories(${LUA_INCLUDE_DIR})
+# find_package(Lua REQUIRED)
+include_directories(${LUAJIT_INCLUDE_DIR})
 
 if(NOT USE_INTERNAL_FPCONV)
     # Use libc number conversion routines (strtod(), sprintf())
@@ -51,7 +51,7 @@ if(NOT HAVE_ISINF)
 endif()
 
 set(_MODULE_LINK "${CMAKE_THREAD_LIBS_INIT}")
-get_filename_component(_lua_lib_dir ${LUA_LIBRARY} PATH)
+get_filename_component(_lua_lib_dir ${LUAJIT_SHARED} PATH)
 
 if(APPLE)
     set(CMAKE_SHARED_MODULE_CREATE_C_FLAGS
@@ -60,12 +60,12 @@ endif()
 
 if(WIN32)
     # Win32 modules need to be linked to the Lua library.
-    set(_MODULE_LINK ${LUA_LIBRARY} ${_MODULE_LINK})
-    set(_lua_module_dir "${_lua_lib_dir}")
+    set(_MODULE_LINK ${LUAJIT_SHARED} ${_MODULE_LINK})
+    # set(_lua_module_dir "${_lua_lib_dir}")
     # Windows sprintf()/strtod() handle NaN/inf differently. Not supported.
     add_definitions(-DDISABLE_INVALID_NUMBERS)
 else()
-    set(_lua_module_dir "${_lua_lib_dir}/lua/5.1")
+    # set(_lua_module_dir "${_lua_lib_dir}/lua/5.1")
 endif()
 
 if(MSVC)
@@ -78,6 +78,6 @@ endif()
 add_library(cjson MODULE lua_cjson.c strbuf.c ${FPCONV_SOURCES})
 set_target_properties(cjson PROPERTIES PREFIX "")
 target_link_libraries(cjson ${_MODULE_LINK})
-install(TARGETS cjson DESTINATION "${_lua_module_dir}")
+# install(TARGETS cjson DESTINATION "${_lua_module_dir}")
 
 # vi:ai et sw=4 ts=4:
