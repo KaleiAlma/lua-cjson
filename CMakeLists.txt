@@ -15,6 +15,13 @@ if(NOT CMAKE_BUILD_TYPE)
         FORCE)
 endif()
 
+if(NOT LUAJIT_INCLUDE_DIR)
+    set(LUAJIT_INCLUDE_DIR ${luajit_BINARY_DIR}/luajit/include/luajit-2.1)
+endif()
+if(NOT LUAJIT_SHARED)
+    set(LUAJIT_SHARED "${luajit_BINARY_DIR}/luajit/lib/${CMAKE_SHARED_LIBRARY_PREFIX}luajit${CMAKE_SHARED_LIBRARY_SUFFIX}")
+endif()
+
 # find_package(Lua REQUIRED)
 include_directories(${LUAJIT_INCLUDE_DIR})
 
